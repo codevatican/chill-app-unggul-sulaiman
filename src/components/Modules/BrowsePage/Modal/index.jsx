@@ -73,7 +73,7 @@ const Modal = () => {
                             className='bg-slate-50 w-32 text-black flex items-center justify-center gap-1 p-1.5 rounded-md font-bold text-xl'
                         >
                             <GoPlay size={32}/> Play
-                        </button>
+                        </button> 
                         <button className='text-slate-200 hover:text-white '>
                             <GoPlusCircle size={44}/>
                         </button>

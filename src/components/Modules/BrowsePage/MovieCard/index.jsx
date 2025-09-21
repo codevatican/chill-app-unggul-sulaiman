@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactPlayer from 'react-player'
 import Skeleton from '@mods/BrowsePage/MovieCard/Skeleton'
 import {GoPlay, GoPlusCircle, GoChevronDown} from 'react-icons/go'
 import { motion } from 'framer-motion'
 import { useAtom } from 'jotai'
+import { getMovieDetail } from '@/utils/getMovieDetail'
 import { idMovieAtom, isFetchingAtom, isOpenModalAtom } from '@/jotai/atoms'
 import { getVideoUrl } from '@/utils/getVideoURL'
 import { useNavigate } from 'react-router-dom'
@@ -17,17 +18,32 @@ const MovieCard = ({ data, index, latestMovieId, isHover, setIsHover, showOverla
   const [isFetching] = useAtom(isFetchingAtom)
 
   const [videoURL, setVideoURL] = useState(null)
+  const [movieDetail, setMovieDetail] = useState([])
+
+  useEffect(() => {
+    if (isHover && idMovie === data.id) {
+      getMovieDetail({ movie_id: data.id }).then(res => setMovieDetail(res))
+    }
+  }, [isHover, idMovie, data.id])
 
   if(isFetching) return <Skeleton />
+
+  const formatRuntime = (minutes) => {
+    if (!minutes) return ''
+    const h = Math.floor(minutes / 60)
+    const m = minutes % 60
+    return `${h > 0 ? h + 'j ' : ''}${m}m`
+  }
 
   return (
     <>
     {isHover && idMovie === data.id ? (
       <motion.div
-        initial={{ scale: 0, opacity: 0 }} 
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ease: 'easeInOut', duration: 0}}
-        className='relative shadow-md cursor-pointer transition-all w-full'
+        initial={{ scale: 1, opacity: 0 }}
+        animate={{ scale: 1.5, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        className='absolute top-0 left-1/2 z-50 shadow-2xl cursor-pointer w-[300px] rounded-lg overflow-hidden'
+        style={{ transformOrigin: 'center center', translateX: '-50%' }}
       >
           <ReactPlayer 
               url={`https://youtube.com/watch?v=${videoURL}`}
@@ -61,8 +77,26 @@ const MovieCard = ({ data, index, latestMovieId, isHover, setIsHover, showOverla
             </section>
             <section className='text-left'>
               <h2 className='font-semibold'>{data.title}</h2>
-              <p className='text-green-400'>Popularity: {data.popularity}</p>
             </section>
+            {movieDetail && (
+              <section className='flex flex-col gap-1'>
+                <div className='flex gap-2 items-center'>
+                  <span className='px-2 py-1 rounded-full text-white text-sm bg-gray-700'>
+                    {movieDetail.adult ? '18+' : '13+'}
+                  </span>
+                  <span className='px-2 py-1 text-white text-sm'>
+                    {formatRuntime(movieDetail.runtime)}
+                  </span>
+                </div>
+                <div className='flex flex-wrap gap-2 text-gray-300 text-sm'>
+                  {(movieDetail?.genres || []).map((g, i) => (
+                    <span key={g.id}>
+                      {g.name}{i !== (movieDetail?.genres?.length || 0) - 1 && ' •'}
+                    </span>
+                  ))}
+                </div>
+              </section>
+            )}
         </div>
       </motion.div>
     ) : 

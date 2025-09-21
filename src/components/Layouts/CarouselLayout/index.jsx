@@ -30,7 +30,7 @@ const scroll = (offset) => {
         </div>
         <div 
             ref={ref}
-            className='carousel relative flex overflow-x-auto scroll-smooth space-x-2 no-scrollbar'
+            className='carousel relative flex overflow-x-visible scroll-smooth space-x-2 no-scrollbar'
         >
             {children}
         </div>

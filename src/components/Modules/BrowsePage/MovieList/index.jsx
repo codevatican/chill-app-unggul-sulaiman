@@ -43,8 +43,8 @@ const MovieList = ({ title, moviesType }) => {
                 render={(item, index) => (
                     <div 
                         className={moviesType === "now_playing" 
-                                    ? 'carousel-item h-72 w-1/3 mt-4'
-                                    : 'carousel-item w-[220px] h-[330px] mt-4 flex-shrink-0'}
+                                    ? 'carousel-item relative h-72 w-1/3 mt-4 overflow-visible'
+                                    : 'carousel-item relative w-[220px] h-[330px] mt-4 flex-shrink-0 overflow-visible'}
                         key={index}
                         
                         onMouseLeave={() => {
