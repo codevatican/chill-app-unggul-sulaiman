@@ -1,4 +1,3 @@
-import { JUMBOTRON_IMAGE } from '@/constants/listAsset'
 import { emailAtom } from '@/jotai/atoms'
 import { useAtom } from 'jotai'
 import React, { useState } from 'react'

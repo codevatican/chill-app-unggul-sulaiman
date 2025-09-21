@@ -5,7 +5,8 @@ import { LIST_GENRE, LIST_BANTUAN } from '@/constants/listFooter'
 
 const Footer = () => {
     return (
-        <footer className='w-full text-white bg-zinc-900 border-t-2 border-white p-8'>
+        <footer className='bg-zinc-900 pt-32'>
+            <div className='w-full text-white bg-zinc-900 border-t-2 border-white p-8'>
             <div className="grid span-3 gap-y-10 px-8 py-10 sm:px-10 lg:px-16 w-full lg:grid-cols-[0.8fr_2fr] md:grid-cols-[1fr_2.5fr]">
                 <div className="flex flex-col lg:justify-center space-y-6 lg:space-y-6">
                     <img src='../../../dist/chill-logo.svg' height="24" width="140" alt="Chill Logo" />
@@ -43,6 +44,7 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
         </footer>
     )

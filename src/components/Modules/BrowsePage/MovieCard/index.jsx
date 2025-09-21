@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import ReactPlayer from 'react-player'
+import Skeleton from '@mods/BrowsePage/MovieCard/Skeleton'
 import {GoPlay, GoPlusCircle, GoChevronDown} from 'react-icons/go'
 import { motion } from 'framer-motion'
 import { useAtom } from 'jotai'
 import { idMovieAtom, isFetchingAtom, isOpenModalAtom } from '@/jotai/atoms'
 import { getVideoUrl } from '@/utils/getVideoURL'
-import Skeleton from '@mods/BrowsePage/MovieCard/Skeleton'
 import { useNavigate } from 'react-router-dom'
+import { FaStar } from "react-icons/fa";
 
-const MovieCard = ({ data, isHover, setIsHover }) => {
+const MovieCard = ({ data, index, latestMovieId, isHover, setIsHover, showOverlay }) => {
   const navigate = useNavigate()
 
   const [idMovie, setIdMovie] = useAtom(idMovieAtom)
@@ -65,15 +66,49 @@ const MovieCard = ({ data, isHover, setIsHover }) => {
         </div>
       </motion.div>
     ) : 
-      <img 
+      <div 
+        className="relative h-full w-full cursor-pointer overflow-hidden"
         onMouseEnter={() => {
-                            setIsHover(true); 
-                            setIdMovie(data.id)
-                            getVideoUrl({movie_id: data.id}).then(result => setVideoURL(result))
-                        }}
-        src={`${import.meta.env.VITE_URL_BASE_URL_TMDB_IMAGE}${data.poster_path}`}
-        className='max-h-48 w-full object-cover cursor-pointer'
-      /> 
+          if (!data?.id) return;
+          setIsHover(true); 
+          setIdMovie(data.id)
+          getVideoUrl({movie_id: data.id}).then(result => setVideoURL(result))
+        }}
+      >
+        <img 
+          src={`${import.meta.env.VITE_URL_BASE_URL_TMDB_IMAGE}${data.poster_path}`}
+          className="h-full w-full object-cover rounded-lg"
+        />
+
+        {data.id === latestMovieId && (
+            <div className="absolute top-1 left-0">
+              <div className="bg-blue-800 px-4 py-1 rounded-full m-3 text-white text-sm font-semibold">
+                Episode Baru
+              </div>
+            </div>
+        )}
+        {index <= 10 && (
+            <div className="absolute top-0 right-4">
+              <div className="bg-red-700 px-2 py-3 rounded-bl-md rounded-tr-md 
+                    text-white text-sm font-medium flex flex-col items-center leading-tight">
+                <span>Top</span>
+                <span>10</span>
+              </div>
+            </div>
+        )}
+        {showOverlay && (
+          <div className="absolute bottom-0 left-0 w-full px-2 pb-6 flex justify-between items-end                       bg-gradient-to-t from-black/70 to-transparent rounded-b-lg">
+            <h3 className="text-white text-lg font-bold truncate max-w-[70%]">
+              {data.title}
+            </h3>
+            <div className="flex items-center gap-1">
+              <FaStar className="text-white w-4 h-4" />
+              <span className="text-white text-lg">{data.vote_average.toFixed(1)} / 10</span>
+            </div>
+          </div>
+        )}
+      </div>
+      
     }
     </>
   )

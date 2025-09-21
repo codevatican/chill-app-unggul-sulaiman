@@ -15,10 +15,6 @@ const router = createBrowserRouter([
     element: <Browse />
   },
   {
-    path: "/browse",
-    element: <Browse />    
-  },
-  {
     path: '/watch/:id',
     element: <Watch />
   },

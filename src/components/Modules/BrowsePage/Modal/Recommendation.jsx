@@ -6,7 +6,6 @@ import { idMovieAtom, isOpenModalAtom } from '@/jotai/atoms'
 import { getMoviesRecommendation } from '@/utils/getMoviesRecommendation'
 import { getVideoUrl } from '@/utils/getVideoURL'
 import { useNavigate } from 'react-router-dom'
-import { video } from 'framer-motion/client'
 
 const Recommendation = () => {
     const navigate = useNavigate()

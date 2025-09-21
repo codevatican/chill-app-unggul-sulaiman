@@ -1,8 +1,6 @@
-import { JUMBOTRON_IMAGE } from '@/constants/listAsset'
 import { emailAtom } from '@/jotai/atoms'
 import { useAtom } from 'jotai'
 import React, { useState } from 'react'
-import { GoChevronLeft } from 'react-icons/go'
 import { useNavigate } from 'react-router-dom'
 import BgRegister from '../../../dist/bg-register.jpg'
 import LogoChill from '../../../dist/chill-logo.png'

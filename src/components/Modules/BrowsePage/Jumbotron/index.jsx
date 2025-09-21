@@ -6,7 +6,6 @@ import { useAtom } from 'jotai'
 import { idMovieAtom, isOpenModalAtom } from '@/jotai/atoms'
 import { getVideoUrl } from '@/utils/getVideoURL'
 import { useNavigate } from 'react-router-dom'
-import { video } from 'framer-motion/client'
 import { FiInfo } from 'react-icons/fi'
 
 const Jumbotron = () => {

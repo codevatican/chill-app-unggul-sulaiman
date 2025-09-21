@@ -12,7 +12,7 @@ const Watch = () => {
   return (
     <BrowseLayout>
     <div 
-        onClick={() => navigate('/browse')}
+        onClick={() => navigate('/')}
         className='absolute top-20 left-6 hover:text-white transition-all cursor-pointer'
     >
         <GoChevronLeft size={44} />

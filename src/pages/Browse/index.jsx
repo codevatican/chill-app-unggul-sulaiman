@@ -19,6 +19,7 @@ function Browse(){
                     <MovieList title={"Melanjutkan Tonton Film"} moviesType={"now_playing"}/>
                     <MovieList title={"Top Rating Film dan Series Hari Ini"} moviesType={"top_rated"}/>
                     <MovieList title={"Film Trending"} moviesType={"popular"}/>
+                    <MovieList title={"Rilis Baru"} moviesType={"new_releases"}/>
                     <Footer />
                 </>
             )}
