@@ -1,3 +1,7 @@
+import { emailStorageAtom, passwordStorageAtom, tokenAtom } from '@/jotai/atoms'
+import { auth } from '@/utils/firebase'
+import { signOut } from 'firebase/auth'
+import { useAtom } from 'jotai'
 import React from 'react'
 import { FaSignOutAlt, FaStar, FaUser } from 'react-icons/fa'
 import { GoChevronDown } from 'react-icons/go'
@@ -6,6 +10,10 @@ import { useNavigate } from 'react-router-dom'
 
 const AccountMenu = () => {
   const navigate = useNavigate()
+  const [, setIsToken] = useAtom(tokenAtom)
+  const [, setEmailStorage] = useAtom(emailStorageAtom)
+  const [, setPasswordStorage] = useAtom(passwordStorageAtom)
+
   return (
     <div className="dropdown dropdown-hover dropdown-end">
       <div tabIndex={0} className="flex items-center gap-2 cursor-pointer">
@@ -23,7 +31,19 @@ const AccountMenu = () => {
         <li className=''>
             <button onClick={() => console.log('Profile Saya')} className='hover:bg-blue-500'><FaUser size={16} className="" />Profile Saya</button>
             <button onClick={() => console.log('Ubah Premium')} className='hover:bg-blue-500'><FaStar size={16} className="" />Ubah Premium</button>
-            <button onClick={() => navigate('/login')} className='hover:bg-blue-500'><FaSignOutAlt size={16} className="" />Keluar</button>
+            <button 
+              onClick={() => {
+                signOut(auth).then(() => {
+                  setIsToken(null)
+                  setEmailStorage(null)
+                  setPasswordStorage(null)
+                  navigate('/login')
+                })
+              }} 
+              className='hover:bg-blue-500'
+            >
+                <FaSignOutAlt size={16} className="" />Keluar
+            </button>
         </li>
       </ul>
     </div>

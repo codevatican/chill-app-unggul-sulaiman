@@ -16,6 +16,7 @@ const Jumbotron = () => {
     const [isMute, setIsMute] = useState(true)
     const [topMovies, setTopMovies] = useState([])
     const [videoURL, setVideoURL] = useState(null)
+    const [movieDetail] = useState([])
 
     useEffect(() => {
         getMoviesByType({moviesType: "top_rated"}).then((result) => {
@@ -60,17 +61,18 @@ const Jumbotron = () => {
                     >
                         <FiInfo size={24} />Selengkapnya
                     </button>
-                    <div className='border rounded-full p-2'>
-                        18+
+                    <div className='bg-zinc-900/30 border rounded-full p-2'>
+                        {movieDetail.adult ? '18+' : '13+'}
                     </div>
                 </div>
+                
             </div>
-            <div className='absolute top-115 p-8 right-6 text-white'>
+            <div className='absolute top-1/2 -translate-y-1/6 p-8 right-6 text-white'>
                 <div 
-                    className='border rounded-full p-2 cursor-pointer'
+                    className='bg-zinc-900/50 border rounded-full p-2 cursor-pointer'
                     onClick={() => setIsMute(!isMute)}
                 >
-                    {isMute?<GoMute size={24}/>:<GoUnmute size={24}/>}
+                    {isMute?<GoMute size={24}/>:<GoUnmute size={24}/>} 
                 </div>
             </div>
         </div>

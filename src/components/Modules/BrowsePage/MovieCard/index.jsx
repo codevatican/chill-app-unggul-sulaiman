@@ -9,6 +9,7 @@ import { idMovieAtom, isFetchingAtom, isOpenModalAtom } from '@/jotai/atoms'
 import { getVideoUrl } from '@/utils/getVideoURL'
 import { useNavigate } from 'react-router-dom'
 import { FaStar } from "react-icons/fa";
+import { LIST_VIDEO_RECOMMENDATION } from '@/constants/dummyVideo'
 
 const MovieCard = ({ data, index, latestMovieId, isHover, setIsHover, showOverlay }) => {
   const navigate = useNavigate()
@@ -19,12 +20,6 @@ const MovieCard = ({ data, index, latestMovieId, isHover, setIsHover, showOverla
 
   const [videoURL, setVideoURL] = useState(null)
   const [movieDetail, setMovieDetail] = useState([])
-
-  useEffect(() => {
-    if (isHover && idMovie === data.id) {
-      getMovieDetail({ movie_id: data.id }).then(res => setMovieDetail(res))
-    }
-  }, [isHover, idMovie, data.id])
 
   if(isFetching) return <Skeleton />
 
@@ -42,7 +37,7 @@ const MovieCard = ({ data, index, latestMovieId, isHover, setIsHover, showOverla
         initial={{ scale: 1, opacity: 0 }}
         animate={{ scale: 1.5, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-        className='absolute top-0 left-1/2 z-50 shadow-2xl cursor-pointer w-[300px] rounded-lg overflow-hidden'
+        className='absolute top-0 left-1/2 z-50 shadow-2xl cursor-pointer w-[300px] rounded-lg overflow-hidden pointer-events-none'
         style={{ transformOrigin: 'center center', translateX: '-50%' }}
       >
           <ReactPlayer 
@@ -54,7 +49,7 @@ const MovieCard = ({ data, index, latestMovieId, isHover, setIsHover, showOverla
               height={'180px'}
               controls={false}
           />
-        <div className='h-auto p-2 bg-zinc-900 flex flex-col gap-1.5'>
+        <div className='h-auto p-2 bg-zinc-900 flex flex-col gap-1.5 pointer-events-auto'>
             <section className='mt-1 flex justify-between'>
               <div className='flex gap-2'>
                 <button 
@@ -110,7 +105,7 @@ const MovieCard = ({ data, index, latestMovieId, isHover, setIsHover, showOverla
         }}
       >
         <img 
-          src={`${import.meta.env.VITE_URL_BASE_URL_TMDB_IMAGE}${data.poster_path}`}
+          src={!data.poster_path ? LIST_VIDEO_RECOMMENDATION[0].image : `${import.meta.env.VITE_URL_BASE_URL_TMDB_IMAGE}${data.poster_path}`}
           className="h-full w-full object-cover rounded-lg"
         />
 

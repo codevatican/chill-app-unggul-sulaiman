@@ -9,6 +9,6 @@ export const LIST_NAVBAR = [
     },
     {
         title: "Daftar Saya",
-        url: "/"
+        url: "/daftar_saya"
     }
 ]

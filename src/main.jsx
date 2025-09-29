@@ -8,6 +8,7 @@ import Browse from '@/pages/Browse'
 import Watch from '@/pages/Watch'
 import Register from '@/pages/Register'
 import Login from '@/pages/Login'
+import Favorite from './pages/Favorite'
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />
+  },
+  {
+    path: '/daftar_saya',
+    element: <Favorite />
   }
 ])
 

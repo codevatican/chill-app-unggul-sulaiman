@@ -5,22 +5,54 @@ import { useNavigate } from 'react-router-dom'
 import BgRegister from '../../../dist/bg-register.jpg'
 import LogoChill from '../../../dist/chill-logo.png'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
+import { auth } from '@/utils/firebase'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { ToastContainer, toast } from 'react-toastify';
 
 const Register = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useAtom(emailAtom)
     const [password, setPassword] = useState(null)
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const [error, setError] = useState("")
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const handleRegister = (e) => {
+    const handleRegister = async(e) => {
         e.preventDefault()
-        alert('register di klik')
+        setError("")
+
+        if (!password || !confirmPassword) {
+            setError("Password dan Konfirmasi Password wajib diisi")
+            return
+        }
+
+        if (password !== confirmPassword) {
+            setError("Konfirmasi password tidak sama")
+            return
+        }
+
+        try{
+           const register = await createUserWithEmailAndPassword(auth, email, password)
+           if (register) {
+            toast('register success')
+            setTimeout(() => {
+                navigate("/login")
+            }, 2000)
+           }
+        } catch (error) {
+            toast(error.message)
+        }
     }
 
   return (
     <div>
         <>
+            <ToastContainer
+                position="top-center"
+                theme='dark'
+                autoClose={2000}
+            />
             <img 
                 src={BgRegister}
                 className='min-h-screen bg-cover bg-center flex items-center justify-center'
@@ -39,7 +71,6 @@ const Register = () => {
                             
                                 placeholder='Masukkan Username'
                                 type='email'
-                                value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className='w-full p-4 bg-black/50 rounded-full border border-white/50 peer placeholder-transparent' 
                             />
@@ -70,9 +101,10 @@ const Register = () => {
                         <label className='font-semibold text-white'>Konfirmasi Kata Sandi</label>
                         <div className='relative mt-2'>
                             <input 
-                                placeholder='password'
+                                placeholder='confirm password'
                                 type={showConfirmPassword ? 'text' : 'password'}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
                                 className='w-full p-4 bg-black/50 rounded-full border border-white/50 peer placeholder-transparent' 
                             />
                             <label className='absolute top-0 left-0 pl-4 peer-placeholder-shown:top-3.5 peer-focus:-top-[6px] transition-all text-lg -z-10'>confirm password
@@ -85,6 +117,7 @@ const Register = () => {
                                 {showConfirmPassword ? <AiFillEyeInvisible size={22} className="text-gray-400 hover:text-gray-200 transition" /> : <AiFillEye size={22} className="text-gray-400 hover:text-gray-200 transition" />}
                             </button>
                         </div>
+                        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
                     </div>
                     <div className='flex flex-col gap-4'>
                         <p className='text-gray-400 font-semibold'>Sudah Punya Akun? 

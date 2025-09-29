@@ -1,21 +1,40 @@
-import { emailAtom } from '@/jotai/atoms'
+import { emailAtom, emailStorageAtom, passwordStorageAtom, tokenAtom } from '@/jotai/atoms'
+import { auth } from '@/utils/firebase'
 import { useAtom } from 'jotai'
 import React, { useState } from 'react'
-import { GoChevronLeft } from 'react-icons/go'
 import { useNavigate } from 'react-router-dom'
 import BgRegister from '../../../dist/bg-register.jpg'
 import LogoChill from '../../../dist/chill-logo.png'
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'
+import { signInWithEmailAndPassword, getIdToken } from 'firebase/auth'
+import { toast } from 'react-toastify'
 
 const Register = () => {
     const navigate = useNavigate()
     const [email, setEmail] = useAtom(emailAtom)
     const [password, setPassword] = useState(null)
     const [showPassword, setShowPassword] = useState(false);
+    const [, setToken] = useAtom(tokenAtom)
 
-    const handleLogin = (e) => {
+    const [, setEmailStorage] = useAtom(emailStorageAtom)
+    const [, setPasswordStorage] = useAtom(passwordStorageAtom)
+
+
+    const handleLogin = async(e) => {
         e.preventDefault()
-        alert('login success')
+        try{
+            const login = await signInWithEmailAndPassword(auth, email, password) 
+            if(login){
+                const firebaseToken = await getIdToken(login.user)
+                setToken(firebaseToken)
+                setEmailStorage(login.user.email)
+                setPasswordStorage(password)
+                navigate("/")
+            }
+        }catch (error) {
+            toast(error.message)
+        }
+        
     }
 
   return (
@@ -39,7 +58,6 @@ const Register = () => {
                             
                                 placeholder='Masukkan Username'
                                 type='email'
-                                value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className='w-full p-4 bg-black/50 rounded-full border border-white/50 peer placeholder-transparent' 
                             />
@@ -76,7 +94,7 @@ const Register = () => {
                             </span>
                         </p>
                         <button
-                            onClick={() => navigate("/browse")}
+                            onClick={handleLogin}
                             className='bg-gray-500 py-3 w-full text-white font-bold rounded-full'
                         >
                             Masuk
@@ -87,7 +105,6 @@ const Register = () => {
                             <div className="flex-grow "></div>
                         </div>
                         <button
-                            onClick='/'
                             className='bg-transparent border border-gray-500 py-3 w-full text-white font-bold rounded-full flex gap-2 items-center justify-center'
                         >
                             <img
